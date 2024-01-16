@@ -1,0 +1,6 @@
+index.html
+public/
+node_modules
+*.json
+*.svg
+src/services
