@@ -2,5 +2,5 @@ namespace Poke_Helper.Models.User;
 
 public class LoginUserDto
 {
-    public string name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

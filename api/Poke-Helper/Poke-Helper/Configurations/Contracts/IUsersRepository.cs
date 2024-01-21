@@ -5,5 +5,4 @@ namespace Poke_Helper.Configurations.Contracts;
 
 public interface IUsersRepository : IGenericRepository<User>
 {
-    Task<User?> GetOneAsync(string? name);
 }

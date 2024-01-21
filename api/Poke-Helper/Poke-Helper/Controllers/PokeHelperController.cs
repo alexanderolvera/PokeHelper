@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Poke_Helper.Configurations.Contracts;
 using Poke_Helper.Data;
@@ -10,7 +9,7 @@ namespace Poke_Helper.Controllers;
 [Route("api")]
 public class PokeHelperController : ControllerBase
 {
-    private IUsersRepository _usersRepository;
+    private readonly IUsersRepository _usersRepository;
 
     public PokeHelperController(IUsersRepository usersRepository)
     {
@@ -26,12 +25,13 @@ public class PokeHelperController : ControllerBase
     [HttpPut("login")]
     public async Task<ActionResult<Guid>> Login(LoginUserDto dto)
     {
-        var user = await _usersRepository.GetOneAsync(dto.name);
+        var user = await _usersRepository.GetOneAsync(x => x.Name == dto.Name);
+
         if (user == null)
         {
-            user = await _usersRepository.AddOneAsync(new User { Name = dto.name });
-            
+            user = await _usersRepository.AddOneAsync(new User { Name = dto.Name });
         }
+
         return user.Id;
     }
 }
