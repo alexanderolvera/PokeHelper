@@ -1,13 +1,13 @@
 import PokemonList from '@/components/PokemonList.tsx';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
-import { useState } from 'react';
+import currentPageAtom from '@/atoms/currentPage.atom.ts';
 import { useQuery } from 'react-query';
 import Button from '@/components/buttons/Button.tsx';
 
 function HomeView() {
   const pokemonClient = useRecoilValue(pokemonClientAtom);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRecoilState(currentPageAtom);
   const { data, isFetching } = useQuery(
     ['pokemon-list', page],
     async () => {
