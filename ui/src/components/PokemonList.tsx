@@ -4,13 +4,20 @@ import { Pokemon } from 'pokenode-ts';
 
 interface PokemonListProps {
   pokemon: Pokemon[];
+  favorites: string[];
 }
 
-const PokemonList: React.FC<PokemonListProps> = ({ pokemon }) => {
+const PokemonList: React.FC<PokemonListProps> = ({ pokemon, favorites }) => {
+  const favoritesSet = new Set(favorites);
+
   return (
     <ul className="flex gap-8 flex-wrap justify-center">
       {pokemon.map((x, i) => (
-        <PokemonListItem key={`pokemon-list-item-${i}`} pokemon={x} />
+        <PokemonListItem
+          key={`pokemon-list-item-${i}`}
+          pokemon={x}
+          isFavorite={favoritesSet.has(x.name)}
+        />
       ))}
     </ul>
   );

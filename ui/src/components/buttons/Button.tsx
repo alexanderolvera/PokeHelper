@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <NavLink
         className={twMerge(
-          cx('p-2 text-white text-lg shadow bg-neutral-600 rounded', {
+          cx('p-2 mx-1 text-white text-lg shadow bg-neutral-600 rounded', {
             'hover:bg-neutral-500': !disabled,
             'bg-neutral-400 pointer-events-none': disabled
           }),
@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
   }
   return (
     <button
-      className={cx('p-2 text-white text-lg shadow bg-neutral-600 rounded', {
+      className={cx('py-1.5 px-2 mx-1 text-white text-lg shadow bg-neutral-600 rounded', {
         'hover:bg-neutral-500': !disabled,
         'bg-neutral-400': disabled
       })}

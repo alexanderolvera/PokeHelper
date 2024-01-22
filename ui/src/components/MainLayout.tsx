@@ -8,7 +8,11 @@ const MainLayout: React.FC = () => {
       <div className="mb-10">
         <Navbar />
       </div>
-      <Outlet />
+      <div className="flex justify-center w-full">
+        <div className="w-1/2 flex flex-col gap-10">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };

@@ -9,4 +9,5 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { LoginUserDto } from './models/LoginUserDto';
 
+export { FavoritesService } from './services/FavoritesService';
 export { PokeHelperService } from './services/PokeHelperService';
