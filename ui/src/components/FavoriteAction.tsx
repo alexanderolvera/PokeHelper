@@ -41,7 +41,7 @@ const FavoriteAction: React.FC<FavoriteActionProps> = ({ pokemonName, isFavorite
     }
   });
 
-  const handleFavoriteClick = (e) => {
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     mutation.mutate();
   };

@@ -12,7 +12,7 @@ interface PokemonDetailProps {
 const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) => {
   const currentUserId = useRecoilValue(currentUserIdAtom);
 
-  const getTypeBadgeColor = (type: string): string => {
+  const getTypeBadgeColor = (type: string) => {
     if (type === 'normal') return 'bg-gray-300 text-gray-800';
     if (type === 'fire') return 'bg-red-500 text-white';
     if (type === 'water') return 'bg-blue-500 text-white';
@@ -33,7 +33,7 @@ const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) =>
     return 'bbg-gray-300 text-gray-800';
   };
 
-  const getStatBarColor = (statName) => {
+  const getStatBarColor = (statName: string) => {
     if (statName === 'hp') return 'bg-red-500';
     if (statName === 'attack') return 'bg-yellow-500';
     if (statName === 'defense') return 'bg-green-500';
@@ -43,7 +43,7 @@ const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) =>
     return 'bg-gray-300';
   };
 
-  const getWidthClass = (value: number): string => {
+  const getWidthClass = (value: number) => {
     if (value < 8.333333) return 'w-1/12';
     if (value < 16.666667) return 'w-1/6';
     if (value < 20) return 'w-1/5';

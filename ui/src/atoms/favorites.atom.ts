@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-const favoritesAtom = atom({
+const favoritesAtom = atom<string[]>({
   key: 'favorites',
   default: []
 });

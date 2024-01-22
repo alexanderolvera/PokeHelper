@@ -4,11 +4,12 @@ import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
 import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import { Pokemon } from 'pokenode-ts';
 
 function DetailView() {
-  const { name } = useParams();
+  const { name = '' } = useParams();
   const pokemonClient = useRecoilValue(pokemonClientAtom);
-  const favorites = useRecoilValue(favoritesAtom);
+  const favorites: string[] = useRecoilValue(favoritesAtom);
 
   const { data, isFetching } = useQuery(['pokemon-detail', name], async () => {
     const pokemon = await pokemonClient.getPokemonByName(name);
@@ -17,7 +18,7 @@ function DetailView() {
 
   const isFavorite = favorites.includes(name);
 
-  return !isFetching && <PokemonDetail pokemon={data ?? {}} isFavorite={isFavorite} />;
+  return !isFetching && <PokemonDetail pokemon={data ?? ({} as Pokemon)} isFavorite={isFavorite} />;
 }
 
 export default DetailView;

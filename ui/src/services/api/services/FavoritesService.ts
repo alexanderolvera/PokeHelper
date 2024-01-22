@@ -9,7 +9,7 @@ export class FavoritesService {
      * @returns string Success
      * @throws ApiError
      */
-    public static getApiFavorites(authHeader: string): CancelablePromise<Array<string>> {
+    public static getApiFavorites(authHeader?: string | null): CancelablePromise<Array<string>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/favorites',
@@ -25,7 +25,7 @@ export class FavoritesService {
      */
     public static postApiFavorites(
         pokemonName?: string,
-        authHeader: string,
+        authHeader?: string | null,
     ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -45,7 +45,7 @@ export class FavoritesService {
      */
     public static deleteApiFavorites(
         pokemonName: string,
-        authHeader: string,
+        authHeader?: string | null,
     ): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'DELETE',
