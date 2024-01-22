@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Poke_Helper.Data;
@@ -11,9 +12,11 @@ using Poke_Helper.Data;
 namespace Poke_Helper.Migrations
 {
     [DbContext(typeof(PokeHelperDbContext))]
-    partial class PokeHelperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240121065908_AlterFavoritesTable")]
+    partial class AlterFavoritesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace Poke_Helper.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Favorites", (string)null);
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("Poke_Helper.Data.User", b =>
@@ -54,7 +57,7 @@ namespace Poke_Helper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Poke_Helper.Data.Favorite", b =>

@@ -4,7 +4,7 @@ public class Favorite
 {
     public Guid Id { get; set; }
     
-    public string pokemonId { get; set; }
-    
-    public string name { get; set; }
+    public string PokemonName { get; set; } = string.Empty;
+
+    public Guid UserId { get; set; }
 }

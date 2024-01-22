@@ -1,13 +1,19 @@
 import PokemonList from '@/components/PokemonList.tsx';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
-import { useState } from 'react';
+import currentPageAtom from '@/atoms/currentPage.atom.ts';
+import currentUserIdAtom from '@/atoms/currentUserId.atom.ts';
+import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
 import Button from '@/components/buttons/Button.tsx';
+import { FavoritesService } from '@/services/api';
 
 function HomeView() {
   const pokemonClient = useRecoilValue(pokemonClientAtom);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRecoilState(currentPageAtom);
+  const currentUserId = useRecoilValue(currentUserIdAtom);
+  const [favorites, setFavorites] = useRecoilState(favoritesAtom);
+
   const { data, isFetching } = useQuery(
     ['pokemon-list', page],
     async () => {
@@ -20,9 +26,20 @@ function HomeView() {
       };
     },
     {
-      keepPreviousData: true
+      keepPreviousData: true,
+      refetchOnWindowFocus: false
     }
   );
+
+  const { isFetching: isFetchingFavorites } = useQuery({
+    queryKey: ['favorites'],
+    queryFn: async () => {
+      const result = await FavoritesService.getApiFavorites(currentUserId);
+      setFavorites(result);
+    },
+    enabled: !!currentUserId,
+    refetchOnWindowFocus: false
+  });
 
   const handlePreviousPageClick = () => {
     if (page > 1) {
@@ -36,26 +53,22 @@ function HomeView() {
     }
   };
 
+  const isLoading = isFetching || isFetchingFavorites;
+
   return (
-    <div className="flex justify-center w-full">
-      <div className="w-1/2 flex flex-col gap-10">
-        <div className="flex justify-end items-center">
-          <div className="flex gap-4">
-            <Button
-              label="Prev"
-              onClick={handlePreviousPageClick}
-              disabled={page <= 1 || isFetching}
-            />
-            <Button
-              label="Next"
-              onClick={handleNextPageClick}
-              disabled={!data?.next || isFetching}
-            />
-          </div>
+    <>
+      <div className="flex justify-end items-center">
+        <div className="flex gap-4">
+          <Button
+            label="Prev"
+            onClick={handlePreviousPageClick}
+            disabled={page <= 1 || isLoading}
+          />
+          <Button label="Next" onClick={handleNextPageClick} disabled={!data?.next || isLoading} />
         </div>
-        <PokemonList pokemon={data?.results ?? []} />
       </div>
-    </div>
+      <PokemonList pokemon={data?.results ?? []} favorites={favorites} />
+    </>
   );
 }
 

@@ -1,6 +1,8 @@
 using Hotel_Listings.Configurations.Contracts;
 using Poke_Helper.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
 namespace Poke_Helper.Models.Repositories;
 
 
@@ -13,7 +15,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         _context = context;
     }
 
-    public async Task<T?> GetOneAsync(int? id)
+    public async Task<T?> GetOneAsync(object? id)
     {
         if (id is null)
         {
@@ -23,9 +25,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return await _context.Set<T>().FindAsync(id);
     }
 
+    public async Task<T?> GetOneAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
+    }
+
     public async Task<List<T>> GetAllAsync()
     {
         return await _context.Set<T>().ToListAsync();
+    }
+
+    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>().Where(predicate).ToListAsync();
     }
 
     public async Task<T> AddOneAsync(T entity)
@@ -35,7 +47,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return entity;
     }
 
-    public async Task DeleteOneAsync(int id)
+    public async Task DeleteOneAsync(object id)
     {
         var entity = await GetOneAsync(id);
         if (entity != null)
@@ -54,7 +66,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(object id)
     {
         var entity = await GetOneAsync(id);
         _context.ChangeTracker.Clear();

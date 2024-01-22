@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
+builder.Services.AddScoped(typeof(IFavoritesRepository), typeof(FavoritesRepository));
 
 var app = builder.Build();
 
