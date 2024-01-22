@@ -33,6 +33,7 @@ const FavoriteAction: React.FC<FavoriteActionProps> = ({ pokemonName, isFavorite
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      queryClient.invalidateQueries({ queryKey: ['pokemon-detail'] });
     }
   });
 

@@ -8,8 +8,8 @@ const MainLayout: React.FC = () => {
       <div className="mb-10">
         <Navbar />
       </div>
-      <div className="flex justify-center w-full">
-        <div className="w-1/2 flex flex-col gap-10">
+      <div className="flex justify-center w-full mb-10">
+        <div className="w-3/4 md:w-1/2 flex flex-col gap-10">
           <Outlet />
         </div>
       </div>
