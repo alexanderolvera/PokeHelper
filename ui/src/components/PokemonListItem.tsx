@@ -17,8 +17,7 @@ const PokemonListItem: React.FC<PokemonListItemProps> = ({ pokemon, isFavorite }
   return (
     <li
       className="rounded-lg shadow-lg p-2 flex flex-col gap-2 bg-white border border-gray-200 cursor-pointer"
-      onClick={handleClick}
-    >
+      onClick={handleClick}>
       {currentUserId && (
         <div className="flex justify-end items-center">
           <FavoriteAction pokemonName={pokemon.name} isFavorite={isFavorite} />

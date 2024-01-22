@@ -1,7 +1,6 @@
 import PokemonDetail from '@/components/PokemonDetail.tsx';
 import { useRecoilValue } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
-import currentUserIdAtom from '@/atoms/currentUserId.atom.ts';
 import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -9,7 +8,6 @@ import { useParams } from 'react-router-dom';
 function DetailView() {
   const { name } = useParams();
   const pokemonClient = useRecoilValue(pokemonClientAtom);
-  const currentUserId = useRecoilValue(currentUserIdAtom);
   const favorites = useRecoilValue(favoritesAtom);
 
   const { data, isFetching } = useQuery(['pokemon-detail', name], async () => {

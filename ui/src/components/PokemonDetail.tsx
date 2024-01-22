@@ -67,8 +67,7 @@ const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) =>
       <div
         className={`flex flex-row w-1/2 items-center ${
           currentUserId ? 'justify-between' : 'justify-center'
-        }`}
-      >
+        }`}>
         <h2 className="text-2xl font-semibold text-center text-black">{pokemon.name}</h2>
         {currentUserId && <FavoriteAction pokemonName={pokemon.name} isFavorite={isFavorite} />}
       </div>
@@ -100,8 +99,7 @@ const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) =>
                 key={x.type.name}
                 className={`rounded-full px-2 py-1 text-sm text-gray-700 ${getTypeBadgeColor(
                   x.type.name
-                )}`}
-              >
+                )}`}>
                 {x.type.name}
               </span>
             ))}
@@ -127,8 +125,7 @@ const PokemonDetail: React.FC<PokemonDetailProps> = ({ pokemon, isFavorite }) =>
                 <div
                   className={`h-full rounded-full ${getStatBarColor(x.stat.name)} ${getWidthClass(
                     x.base_stat
-                  )}`}
-                ></div>
+                  )}`}></div>
               </div>
               <span className="md:ml-2">{x.base_stat}</span>
             </li>
