@@ -17,7 +17,8 @@ function FavoritesView() {
       return { pokemon };
     },
     {
-      enabled: !!currentUserId
+      enabled: !!currentUserId,
+      refetchOnWindowFocus: false
     }
   );
 

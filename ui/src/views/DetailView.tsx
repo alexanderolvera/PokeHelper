@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import PokemonDetail from '@/components/PokemonDetail.tsx';
 import { useRecoilValue } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
@@ -11,12 +12,16 @@ function DetailView() {
   const pokemonClient = useRecoilValue(pokemonClientAtom);
   const favorites: string[] = useRecoilValue(favoritesAtom);
 
-  const { data, isFetching } = useQuery(['pokemon-detail', name], async () => {
-    const pokemon = await pokemonClient.getPokemonByName(name);
-    return pokemon;
-  });
+  const { data, isFetching } = useQuery(
+    ['pokemon-detail', name],
+    async () => {
+      const pokemon = await pokemonClient.getPokemonByName(name);
+      return pokemon;
+    },
+    { refetchOnWindowFocus: false }
+  );
 
-  const isFavorite = favorites.includes(name);
+  const isFavorite = useMemo(() => favorites.includes(name), [favorites, name]);
 
   return !isFetching && <PokemonDetail pokemon={data ?? ({} as Pokemon)} isFavorite={isFavorite} />;
 }

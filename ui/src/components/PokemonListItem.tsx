@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Pokemon } from 'pokenode-ts';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -9,7 +9,8 @@ interface PokemonListItemProps {
   pokemon: Pokemon;
   isFavorite: boolean;
 }
-const PokemonListItem: React.FC<PokemonListItemProps> = ({ pokemon, isFavorite }) => {
+
+const PokemonListItem: React.FC<PokemonListItemProps> = memo(({ pokemon, isFavorite }) => {
   const navigate = useNavigate();
   const handleClick = () => navigate(`/pokemon/${pokemon.name}`);
   const currentUserId = useRecoilValue(currentUserIdAtom);
@@ -31,6 +32,6 @@ const PokemonListItem: React.FC<PokemonListItemProps> = ({ pokemon, isFavorite }
       <p className="w-full justify-center text-center text-black">{pokemon.name}</p>
     </li>
   );
-};
+});
 
 export default PokemonListItem;

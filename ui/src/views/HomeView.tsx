@@ -7,7 +7,6 @@ import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
 import Button from '@/components/buttons/Button.tsx';
 import { FavoritesService } from '@/services/api';
-import { Loader } from 'lucide-react';
 
 function HomeView() {
   const pokemonClient = useRecoilValue(pokemonClientAtom);
@@ -27,7 +26,8 @@ function HomeView() {
       };
     },
     {
-      keepPreviousData: true
+      keepPreviousData: true,
+      refetchOnWindowFocus: false
     }
   );
 
@@ -38,7 +38,7 @@ function HomeView() {
       setFavorites(result);
     },
     enabled: !!currentUserId,
-    staleTime: Infinity
+    refetchOnWindowFocus: false
   });
 
   const handlePreviousPageClick = () => {
@@ -53,16 +53,18 @@ function HomeView() {
     }
   };
 
-  return isFetching || isFetchingFavorites ? (
-    <div className="flex flex-row justify-center">
-      <Loader className="animate-spin" color="gray" size={50} />
-    </div>
-  ) : (
+  const isLoading = isFetching || isFetchingFavorites;
+
+  return (
     <>
       <div className="flex justify-end items-center">
         <div className="flex gap-4">
-          <Button label="Prev" onClick={handlePreviousPageClick} disabled={page <= 1} />
-          <Button label="Next" onClick={handleNextPageClick} disabled={!data?.next} />
+          <Button
+            label="Prev"
+            onClick={handlePreviousPageClick}
+            disabled={page <= 1 || isLoading}
+          />
+          <Button label="Next" onClick={handleNextPageClick} disabled={!data?.next || isLoading} />
         </div>
       </div>
       <PokemonList pokemon={data?.results ?? []} favorites={favorites} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PokemonListItem from '@/components/PokemonListItem.tsx';
 import { Pokemon } from 'pokenode-ts';
 
@@ -8,7 +8,7 @@ interface PokemonListProps {
 }
 
 const PokemonList: React.FC<PokemonListProps> = ({ pokemon, favorites }) => {
-  const favoritesSet = new Set(favorites);
+  const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
 
   return (
     <ul className="flex gap-8 flex-wrap justify-center">
