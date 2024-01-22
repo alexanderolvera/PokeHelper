@@ -26,11 +26,10 @@ namespace Poke_Helper.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<List<string>>> GetFavorites([FromQuery] List<string>? pokemonNames = null)
+        public async Task<ActionResult<List<string>>> GetFavorites()
         {
             var favorites = (await _favoritesRepository
-                .GetAllAsync(x => x.UserId == _userId && (pokemonNames == null || pokemonNames.Contains(x.PokemonName))))
-                ?.Select(x => x.PokemonName)
+                .GetAllAsync(x => x.UserId == _userId ))?.Select(x => x.PokemonName)
                 .ToList();
 
             return favorites ?? new List<string>();

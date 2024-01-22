@@ -1,7 +1,8 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import currentUserIdAtom from '@/atoms/currentUserId.atom.ts';
-import { useMutation, useQueryClient } from 'react-query';
+import favoritesAtom from '@/atoms/favorites.atom.ts';
+import { useMutation } from 'react-query';
 import { FavoritesService } from '@/services/api';
 import toast from 'react-hot-toast';
 import { Heart } from 'lucide-react';
@@ -12,8 +13,8 @@ interface FavoriteActionProps {
 }
 
 const FavoriteAction: React.FC<FavoriteActionProps> = ({ pokemonName, isFavorite }) => {
+  const setFavorites = useSetRecoilState(favoritesAtom);
   const currentUserId = useRecoilValue(currentUserIdAtom);
-  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -32,8 +33,11 @@ const FavoriteAction: React.FC<FavoriteActionProps> = ({ pokemonName, isFavorite
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['favorites'] });
-      queryClient.invalidateQueries({ queryKey: ['pokemon-detail'] });
+      if (isFavorite) {
+        setFavorites((favorites) => favorites.filter((favorite) => favorite !== pokemonName));
+      } else {
+        setFavorites((favorites) => [...favorites, pokemonName]);
+      }
     }
   });
 

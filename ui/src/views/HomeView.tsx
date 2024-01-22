@@ -3,14 +3,17 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
 import currentPageAtom from '@/atoms/currentPage.atom.ts';
 import currentUserIdAtom from '@/atoms/currentUserId.atom.ts';
+import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
 import Button from '@/components/buttons/Button.tsx';
 import { FavoritesService } from '@/services/api';
+import { Loader } from 'lucide-react';
 
 function HomeView() {
   const pokemonClient = useRecoilValue(pokemonClientAtom);
   const [page, setPage] = useRecoilState(currentPageAtom);
   const currentUserId = useRecoilValue(currentUserIdAtom);
+  const [favorites, setFavorites] = useRecoilState(favoritesAtom);
 
   const { data, isFetching } = useQuery(
     ['pokemon-list', page],
@@ -20,8 +23,7 @@ function HomeView() {
       const pokemon = await Promise.all(results.map((x) => pokemonClient.getPokemonByName(x.name)));
       return {
         results: pokemon,
-        next,
-        checkPageFavorites: page
+        next
       };
     },
     {
@@ -29,16 +31,13 @@ function HomeView() {
     }
   );
 
-  const { data: favorites, isFetching: isFetchingFavorites } = useQuery({
-    queryKey: ['favorites', data?.checkPageFavorites],
+  const { isFetching: isFetchingFavorites } = useQuery({
+    queryKey: ['favorites'],
     queryFn: async () => {
-      const result = await FavoritesService.getApiFavorites(
-        data?.results.map((x) => x.name),
-        currentUserId
-      );
-      return result;
+      const result = await FavoritesService.getApiFavorites(currentUserId);
+      setFavorites(result);
     },
-    enabled: !!currentUserId && !!data?.checkPageFavorites,
+    enabled: !!currentUserId,
     staleTime: Infinity
   });
 
@@ -54,25 +53,19 @@ function HomeView() {
     }
   };
 
-  return (
+  return isFetching || isFetchingFavorites ? (
+    <div className="flex flex-row justify-center">
+      <Loader className="animate-spin" color="gray" size={50} />
+    </div>
+  ) : (
     <>
       <div className="flex justify-end items-center">
         <div className="flex gap-4">
-          <Button
-            label="Prev"
-            onClick={handlePreviousPageClick}
-            disabled={page <= 1 || isFetching || isFetchingFavorites}
-          />
-          <Button
-            label="Next"
-            onClick={handleNextPageClick}
-            disabled={!data?.next || isFetching || isFetchingFavorites}
-          />
+          <Button label="Prev" onClick={handlePreviousPageClick} disabled={page <= 1} />
+          <Button label="Next" onClick={handleNextPageClick} disabled={!data?.next} />
         </div>
       </div>
-      {!isFetching && !isFetchingFavorites && (
-        <PokemonList pokemon={data?.results ?? []} favorites={favorites ?? []} />
-      )}
+      <PokemonList pokemon={data?.results ?? []} favorites={favorites} />
     </>
   );
 }

@@ -2,36 +2,24 @@ import PokemonDetail from '@/components/PokemonDetail.tsx';
 import { useRecoilValue } from 'recoil';
 import pokemonClientAtom from '@/atoms/pokemonClient.atom.ts';
 import currentUserIdAtom from '@/atoms/currentUserId.atom.ts';
+import favoritesAtom from '@/atoms/favorites.atom.ts';
 import { useQuery } from 'react-query';
-import { FavoritesService } from '@/services/api';
 import { useParams } from 'react-router-dom';
 
 function DetailView() {
   const { name } = useParams();
   const pokemonClient = useRecoilValue(pokemonClientAtom);
   const currentUserId = useRecoilValue(currentUserIdAtom);
+  const favorites = useRecoilValue(favoritesAtom);
 
-  const { data, isFetching } = useQuery(
-    ['pokemon-detail', name],
-    async () => {
-      const favorites = currentUserId
-        ? await FavoritesService.getApiFavorites(null, currentUserId)
-        : [];
-      const pokemon = await pokemonClient.getPokemonByName(name);
+  const { data, isFetching } = useQuery(['pokemon-detail', name], async () => {
+    const pokemon = await pokemonClient.getPokemonByName(name);
+    return pokemon;
+  });
 
-      return {
-        pokemon,
-        isFavorite: favorites.includes(name)
-      };
-    },
-    {
-      staleTime: Infinity
-    }
-  );
+  const isFavorite = favorites.includes(name);
 
-  return (
-    !isFetching && <PokemonDetail pokemon={data?.pokemon ?? {}} isFavorite={data?.isFavorite} />
-  );
+  return !isFetching && <PokemonDetail pokemon={data ?? {}} isFavorite={isFavorite} />;
 }
 
 export default DetailView;
